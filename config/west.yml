@@ -1,0 +1,16 @@
+manifest:
+  remotes:
+    - name: moergo-sc
+      url-base: https://github.com/moergo-sc
+    - name: badjeff
+      url-base: https://github.com/badjeff
+  projects:
+    - name: zmk
+      remote: moergo-sc
+      revision: main
+      import: app/west.yml
+    - name: zmk-pmw3610-driver
+      remote: badjeff
+      revision: main      
+  self:
+    path: config
