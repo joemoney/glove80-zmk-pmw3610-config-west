@@ -193,6 +193,8 @@
 #endif
 };
 
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 100   //default value is 10, too small for OS to pick up even at 20mS tap
+
 / {
     behaviors {
         magic: magic {
@@ -202,6 +204,22 @@
             flavor = "tap-preferred";
             tapping-term-ms = <200>;
             bindings = <&mo>, <&rgb_ug_status_macro>;
+        };
+
+        /* rotary encoder behavior as vertical scroller */
+        rot_scrl_vertical: behavior_scroll_vertical {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>; 
+            bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
+            tap-ms = <20>;
+        };
+
+        /* rotary encoder behavior as a horizontal scroller */
+        rot_scrl_horizontal: behavior_scroll_horizontal {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>; 
+            bindings = <&msc SCRL_LEFT>, <&msc SCRL_RIGHT>;
+            tap-ms = <20>;
         };
     };
 };
@@ -331,6 +349,7 @@
         &kp LC(LSHFT)            &kp Z          &kp X          &kp C      &kp V   &kp B  &kp LSHFT  &kp LCTRL  &kp LALT  &kp RALT  &kp RCTRL  &kp RSHFT   &kp N          &kp M  &kp COMMA    &kp DOT   &kp FSLH  &kp RS(RALT)
  &magic LAYER_Magic 0  &kp KP_MULTIPLY       &kp BSLH      &kp MINUS  &kp EQUAL           &kp BSPC    &kp DEL    &lower  &kp RGUI    &kp RET  &kp SPACE              &mkp LCLK  &mkp MCLK  &mkp RCLK  &kp PG_DN         &none
             >;
+            sensor-bindings = <&rot_scrl_vertical>;
         };
 
         layer_Lower {
@@ -342,6 +361,7 @@
                &trans   &none           &none           &none            &none      &kp LBKT  &trans  &trans  &trans  &trans           &trans            &trans      &kp RBKT          &none         &none          &none            &none           &trans
  &magic LAYER_Magic 0   &none           &none           &none            &none                &trans  &trans  &trans  &trans  &kp RC(RA(DEL))  &kp LC(LS(LGUI))                       &trans        &trans         &trans            &none           &trans
             >;
+            sensor-bindings = <&rot_scrl_horizontal>;
         };
 
         layer_Magic {

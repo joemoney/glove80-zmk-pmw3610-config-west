@@ -6,33 +6,27 @@
 
 #include <input/processors.dtsi>                // Provides &zip_xy_transform, &zip_xy_to_scroll_mapper, &zip_scroll_scaler
 #include <dt-bindings/zmk/input_transform.h>    // Provides INPUT_TRANSFORM_X_INVERT and INPUT_TRANSFORM_Y_INVERT
+#include "glove80.dtsi"
 
-/* common device tree between left and right hand for the trackball */
 / {
-    split_inputs {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        trackball_split: trackball_split@0 {
-            compatible = "zmk,input-split";
-            reg = <0>;
-        };
+    /* configure the rotary encoder */
+    left_encoder: encoder_left {
+        compatible = "alps,ec11";
+        a-gpios = <&gpio0 22 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; //Adjust A pin 
+        b-gpios = <&gpio0 21 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; //Adjust B pin
+        steps = <80>; // Standard EC-11 has 4 pulse per detent, 20 detents for a full rotation
+        status = "okay";
     };
 
-    trackball_listener: trackball_listener {
-        compatible = "zmk,input-listener";
-        status = "disabled";
-        device = <&trackball_split>;
+    /* Define the rotary encoder sensors */
+    sensors: sensor {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&left_encoder>;
+        triggers-per-rotation = <20>; // Standard EC-11 has 20 detents for a full rotation
     };
 };
 
 /* main trackball listener since left hand is the central */
 &trackball_listener {
     status = "okay";
-
-    scroller {
-        layers = <1>;
-        input-processors = <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>, <&zip_xy_to_scroll_mapper>, <&zip_scroll_scaler 1 30>;
-        process-next;
-    };
 };

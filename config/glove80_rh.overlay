@@ -5,27 +5,7 @@
  */
 
 #include <zephyr/dt-bindings/input/input-event-codes.h>
-
-
-/* common device tree between left and right hand for the trackball */
-/ {
-    split_inputs {
-        #address-cells = <1>;
-        #size-cells = <0>;
-
-        trackball_split: trackball_split@0 {
-            compatible = "zmk,input-split";
-            reg = <0>;
-        };
-    };
-
-    trackball_listener: trackball_listener {
-        compatible = "zmk,input-listener";
-        status = "disabled";
-        device = <&trackball_split>;
-    };
-};
-
+#include "glove80.dtsi"
 
 /* configure IO pins for the SPI */
 &pinctrl {
